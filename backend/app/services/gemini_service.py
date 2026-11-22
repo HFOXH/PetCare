@@ -7,7 +7,7 @@ import google.genai as genai
 from pydantic import BaseModel, Field
 
 
-# Configuración de la API de Google Gemini
+# Google Gemini API configuration
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
 if GOOGLE_API_KEY:
@@ -15,31 +15,31 @@ if GOOGLE_API_KEY:
 
 
 class GeminiExtraction(BaseModel):
-    """Modelo de datos estructurados extraídos por Gemini."""
+    """Data model structured extracted by Gemini."""
     vaccine_name: str = Field(
-        ..., description="Nombre de la vacuna administrada"
+        ..., description="Name of the vaccine administered"
     )
     administered_at: str = Field(
-        ..., description="Fecha de aplicación (formato YYYY-MM-DD)"
+        ..., description="Administration date in YYYY-MM-DD format"
     )
     veterinarian: Optional[str] = Field(
-        None, description="Nombre del veterinario que administró la vacuna"
+        None, description="Name of the veterinarian who administered the vaccine"
     )
     next_due_at: Optional[str] = Field(
-        None, description="Próxima fecha recomendada por el veterinario (formato YYYY-MM-DD)"
+        None, description="Next recommended date by the veterinarian in YYYY-MM-DD format"
     )
     batch_number: Optional[str] = Field(
-        None, description="Número de lote de la vacuna (opcional)"
+        None, description="Vaccine lot number (optional)"
     )
     notes: Optional[str] = Field(
-        None, description="Notas adicionales de la tarjeta de vacunación (opcional)"
+        None, description="Additional notes from the vaccination card (optional)"
     )
 
     model_config = {"extra": "allow"}
 
 
 class GeminiResponse(BaseModel):
-    """Respuesta de la API de Gemini con datos extraídos y metadatos."""
+    """API response with extracted data and metadata."""
     extraction: GeminiExtraction
     success: bool = True
     raw_response: Optional[str] = None
@@ -47,7 +47,7 @@ class GeminiResponse(BaseModel):
 
 
 def encode_image_to_base64(image_path: str) -> str:
-    """Convierte una imagen a string base64 para enviar a Gemini."""
+    """Convert an image to base64 string to send to Gemini."""
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
@@ -57,40 +57,40 @@ def extract_vaccination_data_from_image(
     mime_type: str = "image/jpeg",
 ) -> GeminiExtraction:
     """
-    Envía una imagen de carnet veterinario a Gemini y extrae los datos estructurados.
-    
+    Send a veterinary vaccination card image to Gemini and extract structured data.
+
     Args:
-        image_base64: Imagen en base64
-        mime_type: Tipo MIME de la imagen
-    
+        image_base64: Image in base64
+        mime_type: MIME type of the image
+
     Returns:
-        Datos extraídos estructurados
+        Structured extracted data
     """
-    # Configurar modelo Gemini
+    # Configure Gemini model
     model = genai.GenerativeModel("gemini-1.5-flash")
 
     prompt = """
-    Analiza esta imagen de una tarjeta de vacunación veterinaria para mascotas.
-    Extrae la siguiente información y devuélvela en formato JSON estructurado:
+    Analyze this veterinary vaccination card for pets to extract the following information
+    and return it in structured JSON format:
     
-    1. vaccine_name: Nombre de la vacuna administrada (obligatorio)
-    2. administered_at: Fecha de aplicación en formato YYYY-MM-DD (obligatorio)
-    3. veterinarian: Nombre del veterinario que administró la vacuna (opcional, puede no estar)
-    4. next_due_at: Próxima fecha recomendada por el veterinario en formato YYYY-MM-DD (opcional, puede no estar)
-    5. batch_number: Número de lote de la vacuna (opcional, puede no estar)
-    6. notes: Cualquier otra nota o información adicional de la tarjeta (opcional)
+    1. vaccine_name: Name of the vaccine administered (required)
+    2. administered_at: Administration date in YYYY-MM-DD format (required)
+    3. veterinarian: Name of the veterinarian who administered the vaccine (optional, may not be present)
+    4. next_due_at: Next recommended date by the veterinarian in YYYY-MM-DD format (optional, may not be present)
+    5. batch_number: Vaccine lot number (optional, may not be present)
+    6. notes: Any other note or additional information from the card (optional)
     
-    Devuelve SOLO un objeto JSON válido con estos campos. Si algún campo no se encuentra en la imagen, 
-    usa un string vacío para los obligatorios y null para los opcionales.
+    Return ONLY a valid JSON object with these fields. If any field is not found in the image,
+    use an empty string for required fields and null for optional fields.
     
-    Ejemplo de salida esperada:
+    Expected output example:
     {
-      "vaccine_name": "Rabia",
+      "vaccine_name": "Rabies",
       "administered_at": "2024-03-15",
-      "veterinarian": "Dr. Juan Pérez",
+      "veterinarian": "Dr. Juan Perez",
       "next_due_at": "2025-03-15",
       "batch_number": "LOT-12345",
-      "notes": "Primera dosis"
+      "notes": "First dose"
     }
     """
 
@@ -103,10 +103,10 @@ def extract_vaccination_data_from_image(
             prompt,
         ])
 
-        # Parsear la respuesta JSON
+        # Parse the JSON response
         response_text = response.text.strip()
         
-        # Intentar extraer JSON de la respuesta
+        # Try to extract JSON from the response
         start_idx = response_text.find("{")
         end_idx = response_text.rfind("}") + 1
         
@@ -114,10 +114,10 @@ def extract_vaccination_data_from_image(
             json_str = response_text[start_idx:end_idx]
             data = json.loads(json_str)
         else:
-            # Si no hay JSON, intentar parsear el texto completo
+            # If there's no JSON, try to parse the full text
             data = json.loads(response_text)
 
-        # Validar y retornar usando el modelo Pydantic
+        # Validate and return using the Pydantic model
         extraction = GeminiExtraction(
             vaccine_name=data.get("vaccine_name", ""),
             administered_at=data.get("administered_at", ""),
@@ -130,8 +130,8 @@ def extract_vaccination_data_from_image(
         return extraction
 
     except Exception as e:
-        # En caso de error, retornar datos por defecto
-        print(f"Error en Gemini API: {str(e)}")
+        # In case of error, return default data
+        print(f"Error in Gemini API: {str(e)}")
         return GeminiExtraction(
             vaccine_name="",
             administered_at="",
@@ -144,13 +144,13 @@ def extract_vaccination_data_from_image(
 
 def validate_extraction(extraction: GeminiExtraction) -> bool:
     """
-    Valida que la extracción tenga los datos mínimos requeridos.
-    
+    Validate that the extraction has the required minimum data.
+
     Args:
-        extraction: Datos extraídos por Gemini
-    
+        extraction: Data extracted by Gemini
+
     Returns:
-        True si los datos son válidos, False en caso contrario
+        True if the data is valid, False otherwise
     """
     return (
         extraction.vaccine_name

@@ -4,28 +4,28 @@ from pydantic import BaseModel, Field
 
 
 class GeminiUploadRequest(BaseModel):
-    """Solicitud para subir una imagen de carnet veterinario."""
-    pet_id: uuid.UUID = Field(..., description="ID de la mascota")
+    """Schema to upload a veterinary vaccination card image."""
+    pet_id: uuid.UUID = Field(..., description="Pet ID")
     image_base64: str = Field(
-        ..., description="Imagen en base64"
+        ..., description="Image in base64"
     )
     mime_type: str = Field(
-        "image/jpeg", description="Tipo MIME de la imagen"
+        "image/jpeg", description="MIME type of the image"
     )
 
 
 class GeminiExtractionResponse(BaseModel):
-    """Respuesta del análisis de Gemini."""
+    """API response with Gemini extraction data."""
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     pet_id: uuid.UUID
-    vaccine_name: str = Field(..., description="Nombre de la vacuna")
-    administered_at: str = Field(..., description="Fecha de aplicación (YYYY-MM-DD)")
-    veterinarian: str | None = Field(None, description="Veterinario")
-    next_due_at: str | None = Field(None, description="Próxima fecha recomendada")
-    batch_number: str | None = Field(None, description="Número de lote")
-    notes: str | None = Field(None, description="Notas adicionales")
+    vaccine_name: str = Field(..., description="Vaccine name")
+    administered_at: str = Field(..., description="Administration date in YYYY-MM-DD")
+    veterinarian: str | None = Field(None, description="Veterinarian")
+    next_due_at: str | None = Field(None, description="Next recommended date")
+    batch_number: str | None = Field(None, description="Lot number")
+    notes: str | None = Field(None, description="Additional notes")
     confidence: float = Field(
-        ..., description="Nivel de confianza de la extracción (0-1)"
+        ..., description="Extraction confidence level (0-1)"
     )
     created_at: date = Field(default_factory=date.today)
 
@@ -33,32 +33,32 @@ class GeminiExtractionResponse(BaseModel):
 
 
 class GeminiReviewRequest(BaseModel):
-    """Solicitud para revisar y corregir datos extraídos por Gemini."""
+    """Schema to review and correct data extracted by Gemini."""
     extraction_id: uuid.UUID = Field(
-        ..., description="ID de la extracción a revisar"
+        ..., description="ID of the extraction to review"
     )
     vaccine_name: str = Field(
-        ..., description="Nombre de la vacuna (corregido)"
+        ..., description="Vaccine name (corrected)"
     )
     administered_at: str = Field(
-        ..., description="Fecha de aplicación corregida (YYYY-MM-DD)"
+        ..., description="Corrected administration date in YYYY-MM-DD"
     )
     veterinarian: str | None = Field(
-        None, description="Veterinario corregido (opcional)"
+        None, description="Corrected veterinarian (optional)"
     )
     next_due_at: str | None = Field(
-        None, description="Próxima fecha recomendada corregida (opcional)"
+        None, description="Corrected next recommended date (optional)"
     )
     batch_number: str | None = Field(
-        None, description="Número de lote corregido (opcional)"
+        None, description="Corrected lot number (optional)"
     )
     notes: str | None = Field(
-        None, description="Notas corregidas (opcional)"
+        None, description="Corrected additional notes (optional)"
     )
 
 
 class GeminiReviewResponse(BaseModel):
-    """Respuesta después de revisar los datos."""
+    """Response after reviewing the data."""
     success: bool
     message: str
     extraction_id: uuid.UUID

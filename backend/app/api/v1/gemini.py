@@ -28,39 +28,39 @@ router = APIRouter(prefix="/gemini", tags=["Gemini Integration"])
     "/upload",
     response_model=GeminiExtractionResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Subir imagen de carnet veterinario para análisis",
+    summary="Upload veterinary vaccination card for analysis",
 )
 def upload_pet_card(
     request: GeminiUploadRequest,
     db: Session = Depends(get_db),
 ):
     """
-    Sube una imagen de la tarjeta de vacunación de una mascota y
-    envía a Gemini para extraer los datos de la vacuna.
+    Upload a pet vaccination card image and
+    send to Gemini to extract vaccine data.
     """
-    # Validar que la imagen base64 no esté vacía
+    # Validate that the base64 image is not empty
     if not request.image_base64:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La imagen no puede estar vacía",
+            detail="Image cannot be empty",
         )
     
-    # Enviar a Gemini para extraer datos
+    # Send to Gemini to extract data
     extraction = extract_vaccination_data_from_image(
         image_base64=request.image_base64,
         mime_type=request.mime_type,
     )
     
-    # Validar que tengamos los datos mínimos
+    # Validate that we have minimum data
     if not validate_extraction(extraction):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="No se pudieron extraer los datos mínimos de la vacuna "
-                   "(nombre y fecha son obligatorios). "
-                   "Por favor, verifique la imagen o intente de nuevo.",
+            detail="Minimum vaccine data could not be extracted "
+                   "(name and date are required). "
+                   "Please check the image or try again.",
         )
     
-    # Crear objeto de respuesta para guardar en BD
+    # Create response object to save in DB
     extraction_response = GeminiExtractionResponse(
         id=uuid.uuid4(),
         pet_id=request.pet_id,
@@ -70,10 +70,10 @@ def upload_pet_card(
         next_due_at=extraction.next_due_at,
         batch_number=extraction.batch_number,
         notes=extraction.notes,
-        confidence=0.9,  # Valor por defecto, se podría calcular basándose en el éxito
+        confidence=0.9,  # Default value, could be calculated based on success
     )
     
-    # Guardar en la base de datos
+    # Save to database
     saved = save_gemini_extraction(db, request.pet_id, extraction_response)
     
     return saved
@@ -82,15 +82,15 @@ def upload_pet_card(
 @router.post(
     "/review",
     response_model=GeminiReviewResponse,
-    summary="Revisar y corregir datos extraídos por Gemini",
+    summary="Review and correct data extracted by Gemini",
 )
 def review_extraction(
     request: GeminiReviewRequest,
     db: Session = Depends(get_db),
 ):
     """
-    Permite al usuario revisar y corregir los datos extraídos por Gemini.
-    Los datos confirmados se guardan en la base de datos.
+    Allows the user to review and correct data extracted by Gemini.
+    Confirmed data is saved to the database.
     """
     result = update_gemini_extraction_review(db, request.extraction_id, request)
     
@@ -106,12 +106,12 @@ def review_extraction(
 @router.get(
     "/history/{pet_id}",
     response_model=list[GeminiExtractionResponse],
-    summary="Obtener historial de extracciones para una mascota",
+    summary="Get extraction history for a pet",
 )
 def get_history(
     pet_id: uuid.UUID,
     db: Session = Depends(get_db),
 ):
-    """Obtiene el historial de extracciones de vacunas para una mascota."""
+    """Get the vaccination extraction history for a pet."""
     history = get_pet_vaccination_history(db, pet_id)
     return history

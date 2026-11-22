@@ -22,27 +22,27 @@ def save_gemini_extraction(
     extraction: GeminiExtractionResponse,
 ) -> GeminiExtractionResponse:
     """
-    Guarda los datos extraídos por Gemini en la base de datos.
+    Save data extracted by Gemini into the database.
     
-    Busca o crea un registro de PetVaccination para la mascota y actualiza
-    los campos con los datos extraídos.
+    Searches for or creates a PetVaccination record for the pet and updates
+    the fields with the extracted data.
     """
-    # Verificar que la mascota existe
+    # Check that the pet exists
     pet = db.get(Pet, pet_id)
     if pet is None:
-        raise ValueError(f"Mascota con ID {pet_id} no encontrada")
+        raise ValueError(f"Pet with ID {pet_id} not found")
     
-    # Buscar si ya existe un registro de vacunación para esta mascota
-    # Por simplicidad, creamos uno nuevo o actualizamos el más reciente
+    # Search if there's already a vaccination record for this pet
+    # For simplicity, we create a new one or update the most recent
     stmt = select(PetVaccination).where(PetVaccination.pet_id == pet_id)
     existing = db.scalars(stmt).all()
     
     if existing:
-        # Usar el más reciente
+        # Use the most recent
         vaccination = existing[0]
     else:
-        # Crear nuevo registro (necesitamos un vaccine_id, por ahora usamos uno existente o creamos uno temporal)
-        # Por ahora, obtemos la primera vacuna disponible o creamos una referencia
+        # Create new record (we need a vaccine_id, for now we use an existing one or create a temporary reference)
+        # For now, get the first available vaccine or create a reference
         from app.models.vaccine import Vaccine
         vaccine_stmt = select(Vaccine).limit(1)
         vaccine_result = db.scalars(vaccine_stmt).first()
@@ -54,7 +54,7 @@ def save_gemini_extraction(
         )
         db.add(vaccination)
     
-    # Actualizar campos con los datos extraídos
+    # Update fields with extracted data
     vaccination.administered_at = date.fromisoformat(extraction.administered_at)
     vaccination.veterinarian = extraction.veterinarian
     vaccination.next_due_at = (
@@ -68,11 +68,11 @@ def save_gemini_extraction(
     db.commit()
     db.refresh(vaccination)
     
-    # Retornar respuesta formateada
+    # Return formatted response
     return GeminiExtractionResponse(
         id=vaccination.id,
         pet_id=pet_id,
-        vaccine_name="",  # Se obtendría de la relación con vaccine
+        vaccine_name="",  # Will be obtained from the vaccine relationship
         administered_at=vaccination.administered_at.isoformat()
         if vaccination.administered_at
         else "",
@@ -82,7 +82,7 @@ def save_gemini_extraction(
         else None,
         batch_number=vaccination.batch_number,
         notes=vaccination.notes,
-        confidence=1.0,  # Por defecto, se calcularía en base al éxito del análisis
+        confidence=1.0,  # Default, would be calculated based on analysis success
     )
 
 
@@ -92,33 +92,28 @@ def update_gemini_extraction_review(
     review_data: GeminiReviewRequest,
 ) -> GeminiReviewResponse:
     """
-    Permite al usuario revisar y corregir los datos extraídos por Gemini.
+    Allows the user to review and correct data extracted by Gemini.
     
     Args:
-        db: Sesión de base de datos
-        extraction_id: ID de la extracción a actualizar
-        review_data: Datos corregidos por el usuario
+        db: Database session
+        extraction_id: ID of the extraction to update
+        review_data: Data corrected by the user
     
     Returns:
-        Respuesta de la operación de revisión
+        Response of the review operation
     """
-    # Buscar el registro de extracción
+    # Search for the extraction record
     stmt = select(PetVaccination).where(PetVaccination.id == extraction_id)
     vaccination = db.scalar(stmt)
     
     if vaccination is None:
         return GeminiReviewResponse(
             success=False,
-            message="Registro de extracción no encontrado",
+            message="Extraction record not found",
             extraction_id=extraction_id,
         )
     
-    # Actualizar campos con los datos revisados por el usuario
-    if review_data.vaccine_name:
-        # Nota: vaccine_id es una relación, aquí solo actualizaríamos el nombre
-        # en un caso real, podríamos tener una tabla separada de vacunas extraídas
-        pass
-    
+    # Update fields with data reviewed by the user
     if review_data.administered_at:
         vaccination.administered_at = date.fromisoformat(review_data.administered_at)
     
@@ -143,7 +138,7 @@ def update_gemini_extraction_review(
     
     return GeminiReviewResponse(
         success=True,
-        message="Datos actualizados exitosamente",
+        message="Data updated successfully",
         extraction_id=vaccination.id,
     )
 
@@ -153,7 +148,7 @@ def get_pet_vaccination_history(
     pet_id: uuid.UUID,
 ) -> list[GeminiExtractionResponse]:
     """
-    Obtiene el historial de extracciones de vacunas para una mascota.
+    Get the vaccination extraction history for a pet.
     """
     stmt = select(PetVaccination).where(PetVaccination.pet_id == pet_id)
     vaccinations = db.scalars(stmt).all()
@@ -164,7 +159,7 @@ def get_pet_vaccination_history(
             GeminiExtractionResponse(
                 id=v.id,
                 pet_id=v.pet_id,
-                vaccine_name="",  # Se obtendría de la relación
+                vaccine_name="",  # Will be obtained from the relationship
                 administered_at=v.administered_at.isoformat()
                 if v.administered_at
                 else "",
