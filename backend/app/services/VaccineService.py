@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy import select
 
 from app.db.session import get_db
