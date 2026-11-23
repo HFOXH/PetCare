@@ -1,13 +1,12 @@
 import uuid
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
+from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin, UserResponse
 from app.services.UserService import register_user, authenticate_user, fetch_users, fetch_user, update_user, delete_user
-from app.security import create_access_token, get_current_user
-
+from app.security import create_access_token, get_current_user, get_db
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -33,7 +32,7 @@ def register(
 @router.post(
     "/login",
     response_model=UserResponse,
-    summary="Login and receive JWT token",
+    summary="Login and receive JWT access token",
 )
 def login(
     login_data: UserLogin,
@@ -96,7 +95,7 @@ def update_user_endpoint(
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     updated = update_user(db, user, email=user_data.email, full_name=user_data.full_name)
-    return updated
+    return user
 
 
 @router.delete(
