@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>Vaccination History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && vaccinations.length > 0">
+    <ion-item *ngFor="let v of vaccinations">
+      <ion-icon name="medical" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ v.vaccine_name || 'Unknown Vaccine' }}</h2>
+        <p>Administered: {{ v.administered_at }}</p>
+        <p *ngIf="v.next_due_at">Next due: {{ v.next_due_at }}</p>
+        <p *ngIf="v.veterinarian">Veterinarian: {{ v.veterinarian }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="!isLoading && vaccinations.length === 0" class="empty-state">
+    <ion-icon name="medical" class="empty-icon"></ion-icon>
+    <p>No vaccinations recorded</p>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="goToAddVaccination()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>My Pets</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && pets.length > 0">
+    <ion-item *ngFor="let pet of pets" (click)="goToPetDetail(pet.id)" button>
+      <ion-avatar slot="start">
+        <ion-icon name="paw" style="font-size: 40px; color: var(--ion-color-primary)"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ pet.name }}</h2>
+        <p>{{ pet.breed || 'Unknown breed' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="!isLoading && pets.length === 0" class="empty-state">
+    <ion-icon name="paw" class="empty-icon"></ion-icon>
+    <p>No pets yet</p>
+    <ion-button (click)="goToNewPet()">Add your first pet</ion-button>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="goToNewPet()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

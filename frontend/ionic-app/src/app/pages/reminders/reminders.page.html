@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>Reminders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && reminders.length > 0">
+    <ion-item *ngFor="let r of reminders">
+      <ion-icon name="calendar" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ r.vaccine_name || 'Unknown Vaccine' }}</h2>
+        <p>Next due: {{ r.next_due_at }}</p>
+        <p *ngIf="r.veterinarian">Veterinarian: {{ r.veterinarian }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="!isLoading && reminders.length === 0" class="empty-state">
+    <ion-icon name="calendar" class="empty-icon"></ion-icon>
+    <p>No upcoming reminders</p>
+  </div>
+</ion-content>

@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>Scan Vaccination Card</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="scan-container">
+    <p class="instructions">
+      Take a photo of your pet's vaccination card. Our AI will extract the vaccine information automatically.
+    </p>
+
+    <div class="camera-section">
+      <ion-button expand="block" (click)="takePhoto()" [disabled]="isLoading">
+        <ion-icon name="camera" slot="start"></ion-icon>
+        Take Photo
+      </ion-button>
+      <ion-button expand="block" fill="outline" (click)="takePhoto()" [disabled]="isLoading">
+        <ion-icon name="image" slot="start"></ion-icon>
+        Choose from Gallery
+      </ion-button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-section">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Analyzing card with AI...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</ion-content>

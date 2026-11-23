@@ -1,7 +1,5 @@
 import uuid
-from datetime import datetime, timezone
-
-from passlib.context import CryptContext
+import bcrypt
 from sqlalchemy import select
 
 from app.db.session import get_db
@@ -9,18 +7,16 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin, UserResponse
 
 
-# Password hashing context using bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
+# Password hashing using bcrypt directly
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
 def get_password_hash(password: str) -> str:
     """Hash a plain password using bcrypt."""
-    return pwd_context.hash(password)
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
 
 def register_user(db, email: str, full_name: str, password: str) -> User:

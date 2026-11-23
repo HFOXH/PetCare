@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>Review Extracted Data</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="form-container">
+    <p class="info-text">
+      Review and correct the data extracted by AI. Confirm when ready.
+    </p>
+
+    <ion-item>
+      <ion-label position="floating">Vaccine Name *</ion-label>
+      <ion-input type="text" [(ngModel)]="vaccineName" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Administration Date *</ion-label>
+      <ion-input type="date" [(ngModel)]="administeredAt" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Veterinarian</ion-label>
+      <ion-input type="text" [(ngModel)]="veterinarian"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Next Due Date</ion-label>
+      <ion-input type="date" [(ngModel)]="nextDueAt"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Batch Number</ion-label>
+      <ion-input type="text" [(ngModel)]="batchNumber"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Notes</ion-label>
+      <ion-input type="text" [(ngModel)]="notes"></ion-input>
+    </ion-item>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <ion-button expand="block" (click)="saveExtraction()" [disabled]="isLoading" class="save-button">
+      <ion-spinner *ngIf="isLoading"></ion-spinner>
+      <span *ngIf="!isLoading">Confirm & Save</span>
+    </ion-button>
+  </div>
+</ion-content>

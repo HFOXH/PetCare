@@ -1,0 +1,27 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  color: var(--ion-color-danger);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+
+  .empty-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 1rem 0 2rem;
+  }
+}

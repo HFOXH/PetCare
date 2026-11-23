@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>PetCare</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="welcome-container">
+    <div class="logo-section">
+      <ion-icon name="paw" class="logo-icon"></ion-icon>
+      <h1>PetCare</h1>
+      <p class="subtitle">Your pet's health companion</p>
+    </div>
+
+    <div class="features">
+      <h2>Features</h2>
+      <ul>
+        <li>Track your pets' vaccination history</li>
+        <li>Smart scanning with AI</li>
+        <li>Reminders for upcoming vaccines</li>
+        <li>Manage multiple pets</li>
+      </ul>
+    </div>
+
+    <div class="buttons">
+      <ion-button expand="block" (click)="goToLogin()">
+        Login
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
+      <ion-button expand="block" fill="outline" (click)="goToRegister()">
+        Register
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

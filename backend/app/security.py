@@ -2,7 +2,8 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from jwt import PyJWTError
-from passlib.context import CryptContext
+import bcrypt
+from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings
 from app.models.user import User
@@ -12,13 +13,13 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 
-# Password hashing context (may not be needed here but kept for consistency)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # JWT settings from environment or defaults
 SECRET_KEY = settings.secret_key if hasattr(settings, "secret_key") else "super-secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+
+# OAuth2 scheme for token authentication
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/users/login")
 
 
 def create_access_token(subject: uuid.UUID | str, expires_delta: timedelta | None = None) -> str:
@@ -63,7 +64,10 @@ def jwt_decode(token: str, key: str, algorithms: list = ["HS256"]) -> dict:
     return pyjwt.decode(token, key, algorithms=algorithms)
 
 
-def get_current_user(db: Session, token: str) -> User:
+def get_current_user(
+    db: Session = Depends(get_db),
+    token: str = Depends(oauth2_scheme),
+) -> User:
     """Dependency: get the current authenticated user from a JWT token."""
     payload = decode_access_token(token)
     user_id: str = payload.get("sub")
@@ -85,10 +89,5 @@ def get_current_user(db: Session, token: str) -> User:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found",
-        )
-    if not getattr(user, "is_active", True) is True:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Inactive user",
         )
     return user

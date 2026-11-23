@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin, UserResponse
+from app.schemas.user import UserCreate, UserLogin, UserResponse, LoginResponse
 from app.services.UserService import register_user, authenticate_user, fetch_users, fetch_user, update_user, delete_user
-from app.security import create_access_token, get_current_user, get_db
+from app.security import create_access_token, get_current_user
+
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -31,7 +31,7 @@ def register(
 
 @router.post(
     "/login",
-    response_model=UserResponse,
+    response_model=LoginResponse,
     summary="Login and receive JWT access token",
 )
 def login(
@@ -46,7 +46,19 @@ def login(
             detail="Incorrect email or password",
         )
     access_token = create_access_token(subject=user.id)
-    return user
+    return LoginResponse(access_token=access_token, user=user)
+
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+    summary="Get current user profile",
+)
+def get_current_user_profile(
+    current_user=Depends(get_current_user),
+):
+    """Get the current authenticated user's profile."""
+    return current_user
 
 
 @router.get(

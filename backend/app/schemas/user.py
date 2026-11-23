@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, validator
 class UserCreate(BaseModel):
     email: str = Field(min_length=1, max_length=255)
     full_name: str = Field(min_length=1, max_length=150)
+    password: str = Field(min_length=1)
 
     @validator("email")
     def email_must_contain_at(cls, v):
@@ -28,3 +29,9 @@ class UserResponse(BaseModel):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
