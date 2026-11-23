@@ -30,9 +30,7 @@
       <ion-input type="password" [(ngModel)]="password" required></ion-input>
     </ion-item>
 
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <ion-button expand="block" (click)="register()" [disabled]="isLoading" class="register-button">
       <ion-spinner *ngIf="isLoading"></ion-spinner>
@@ -40,7 +38,7 @@
     </ion-button>
 
     <p class="login-link">
-      Already have an account? 
+      Already have an account?
       <a (click)="goBack()">Sign in here</a>
     </p>
   </div>

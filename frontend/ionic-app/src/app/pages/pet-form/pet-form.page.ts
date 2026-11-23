@@ -2,7 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonButton, IonSpinner, IonIcon } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonButton,
+  IonSpinner,
+  IonIcon,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { save, arrowBack } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -13,7 +26,22 @@ import { Species } from '../../models/vaccine.model';
   selector: 'app-pet-form',
   templateUrl: 'pet-form.page.html',
   styleUrls: ['pet-form.page.scss'],
-  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonButton, IonSpinner, IonIcon],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonButton,
+    IonSpinner,
+    IonIcon,
+  ],
 })
 export class PetFormPage implements OnInit {
   isEdit = false;
@@ -30,7 +58,11 @@ export class PetFormPage implements OnInit {
   speciesId = '';
   speciesList: Species[] = [];
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     addIcons({ save, arrowBack });
   }
 
@@ -50,7 +82,7 @@ export class PetFormPage implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load species', err);
-      }
+      },
     });
   }
 
@@ -69,7 +101,7 @@ export class PetFormPage implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to load pet';
-      }
+      },
     });
   }
 
@@ -98,7 +130,7 @@ export class PetFormPage implements OnInit {
         error: (err) => {
           this.isLoading = false;
           this.errorMessage = err.message || 'Failed to update pet';
-        }
+        },
       });
     } else {
       const data: PetCreate = {
@@ -118,7 +150,7 @@ export class PetFormPage implements OnInit {
         error: (err) => {
           this.isLoading = false;
           this.errorMessage = err.message || 'Failed to create pet';
-        }
+        },
       });
     }
   }

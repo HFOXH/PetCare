@@ -2,7 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonSpinner } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonSpinner,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { save, arrowBack } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -12,7 +23,20 @@ import { GeminiExtraction, GeminiReviewRequest } from '../../models/vaccine.mode
   selector: 'app-review-extraction',
   templateUrl: 'review-extraction.page.html',
   styleUrls: ['review-extraction.page.scss'],
-  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonSpinner],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonSpinner,
+  ],
 })
 export class ReviewExtractionPage implements OnInit {
   extraction: GeminiExtraction | null = null;
@@ -27,7 +51,11 @@ export class ReviewExtractionPage implements OnInit {
   batchNumber = '';
   notes = '';
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     addIcons({ save, arrowBack });
   }
 
@@ -86,7 +114,7 @@ export class ReviewExtractionPage implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to save extraction';
-      }
+      },
     });
   }
 

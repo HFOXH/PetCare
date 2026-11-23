@@ -2,7 +2,18 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonSpinner } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonSpinner,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { mail, lockClosed, arrowBack } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -12,7 +23,20 @@ import { UserLogin } from '../../models/user.model';
   selector: 'app-login',
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonSpinner, FormsModule],
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonSpinner,
+    FormsModule,
+  ],
 })
 export class LoginPage {
   email = '';
@@ -20,7 +44,10 @@ export class LoginPage {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  ) {
     addIcons({ mail, lockClosed, arrowBack });
   }
 
@@ -36,7 +63,7 @@ export class LoginPage {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Login failed';
-      }
+      },
     });
   }
 

@@ -35,7 +35,8 @@ export const routes: Routes = [
   },
   {
     path: 'pets/:id/vaccinations',
-    loadComponent: () => import('./pages/vaccination-history/vaccination-history.page').then((m) => m.VaccinationHistoryPage),
+    loadComponent: () =>
+      import('./pages/vaccination-history/vaccination-history.page').then((m) => m.VaccinationHistoryPage),
   },
   {
     path: 'pets/:id/vaccinations/new',

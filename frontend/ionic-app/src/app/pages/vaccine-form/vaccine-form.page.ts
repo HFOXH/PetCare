@@ -2,7 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonButton, IonSpinner, IonIcon } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonButton,
+  IonSpinner,
+  IonIcon,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { save, arrowBack } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -13,7 +26,22 @@ import { Vaccine } from '../../models/vaccine.model';
   selector: 'app-vaccine-form',
   templateUrl: 'vaccine-form.page.html',
   styleUrls: ['vaccine-form.page.scss'],
-  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonButton, IonSpinner, IonIcon],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonButton,
+    IonSpinner,
+    IonIcon,
+  ],
 })
 export class VaccineFormPage implements OnInit {
   petId = '';
@@ -30,7 +58,11 @@ export class VaccineFormPage implements OnInit {
 
   vaccines: Vaccine[] = [];
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     addIcons({ save, arrowBack });
   }
 
@@ -46,7 +78,7 @@ export class VaccineFormPage implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load vaccines', err);
-      }
+      },
     });
   }
 
@@ -77,7 +109,7 @@ export class VaccineFormPage implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to save vaccination';
-      }
+      },
     });
   }
 

@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   private apiUrl = environment.apiUrl || 'http://localhost:8000/api/v1';
@@ -24,7 +24,7 @@ export class ApiService {
     if (token) {
       return new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       });
     }
     return new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -60,9 +60,9 @@ export class ApiService {
 
   // Auth endpoints
   register(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users/register`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/users/register`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   login(data: any): Observable<any> {
@@ -72,77 +72,77 @@ export class ApiService {
           this.setToken(response.access_token);
         }
       }),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
   // Pets
   getPets(skip = 0, limit = 100): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/pets/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/pets/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   getPet(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/pets/${id}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any>(`${this.apiUrl}/pets/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   createPet(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/pets/`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/pets/`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   updatePet(id: string, data: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/pets/${id}`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .patch(`${this.apiUrl}/pets/${id}`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   deletePet(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/pets/${id}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .delete(`${this.apiUrl}/pets/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   // Species
   getSpecies(skip = 0, limit = 100): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/species/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/species/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   getSpeciesById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/species/${id}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any>(`${this.apiUrl}/species/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   createSpecies(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/species/`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/species/`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   // Vaccines
   getVaccines(skip = 0, limit = 100): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/vaccines/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/vaccines/?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   getVaccine(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/vaccines/${id}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any>(`${this.apiUrl}/vaccines/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   createVaccine(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/vaccines/`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/vaccines/`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   // Pet Vaccinations
@@ -151,51 +151,51 @@ export class ApiService {
     if (petId) {
       url += `&pet_id=${petId}`;
     }
-    return this.http.get<any[]>(url, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any[]>(url, { headers: this.getHeaders() }).pipe(catchError(this.handleError));
   }
 
   getVaccinationHistory(petId: string, skip = 0, limit = 100): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/pet-vaccinations/pet/${petId}?skip=${skip}&limit=${limit}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/pet-vaccinations/pet/${petId}?skip=${skip}&limit=${limit}`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
   }
 
   createPetVaccination(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/pet-vaccinations/`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/pet-vaccinations/`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   updatePetVaccination(id: string, data: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/pet-vaccinations/${id}`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .patch(`${this.apiUrl}/pet-vaccinations/${id}`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   deletePetVaccination(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/pet-vaccinations/${id}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .delete(`${this.apiUrl}/pet-vaccinations/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   // Gemini
   uploadPetCard(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/gemini/upload`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/gemini/upload`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   reviewExtraction(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/gemini/review`, data, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post(`${this.apiUrl}/gemini/review`, data, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
   getGeminiHistory(petId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/gemini/history/${petId}`, { headers: this.getHeaders() }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/gemini/history/${petId}`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
   }
 }

@@ -1,7 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButton, IonIcon, IonFab, IonFabButton, IonSpinner } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonIcon,
+  IonFab,
+  IonFabButton,
+  IonSpinner,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { add, arrowBack, medical } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -11,7 +24,21 @@ import { PetVaccination } from '../../models/vaccine.model';
   selector: 'app-vaccination-history',
   templateUrl: 'vaccination-history.page.html',
   styleUrls: ['vaccination-history.page.scss'],
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButton, IonIcon, IonFab, IonFabButton, IonSpinner],
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonButton,
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonSpinner,
+  ],
 })
 export class VaccinationHistoryPage implements OnInit {
   petId = '';
@@ -19,7 +46,11 @@ export class VaccinationHistoryPage implements OnInit {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     addIcons({ add, arrowBack, medical });
   }
 
@@ -40,7 +71,7 @@ export class VaccinationHistoryPage implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to load vaccinations';
-      }
+      },
     });
   }
 

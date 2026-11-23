@@ -1,6 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonButton,
+  IonIcon,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { paw, camera, calendar, medical } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -9,10 +21,25 @@ import { ApiService } from '../../services/api.service';
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
   styleUrls: ['dashboard.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, IonGrid, IonRow, IonCol],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonGrid,
+    IonRow,
+    IonCol,
+  ],
 })
 export class DashboardPage {
-  constructor(private api: ApiService, private router: Router) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  ) {
     addIcons({ paw, camera, calendar, medical });
   }
 

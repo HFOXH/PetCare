@@ -19,7 +19,10 @@ export class ScanPage {
   imageBase64 = '';
   mimeType = 'image/jpeg';
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  ) {
     addIcons({ camera, image, arrowBack });
     const params = new URLSearchParams(window.location.search);
     this.petId = params.get('petId') || '';
@@ -69,7 +72,7 @@ export class ScanPage {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to scan card';
-      }
+      },
     });
   }
 

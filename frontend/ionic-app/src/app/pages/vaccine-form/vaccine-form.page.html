@@ -12,9 +12,7 @@
     <ion-item>
       <ion-label position="floating">Vaccine *</ion-label>
       <ion-select [(ngModel)]="vaccineId" placeholder="Select vaccine">
-        <ion-select-option *ngFor="let v of vaccines" [value]="v.id">
-          {{ v.name }}
-        </ion-select-option>
+        <ion-select-option *ngFor="let v of vaccines" [value]="v.id"> {{ v.name }} </ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -43,9 +41,7 @@
       <ion-input type="text" [(ngModel)]="notes"></ion-input>
     </ion-item>
 
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <ion-button expand="block" (click)="saveVaccination()" [disabled]="isLoading" class="save-button">
       <ion-spinner *ngIf="isLoading"></ion-spinner>

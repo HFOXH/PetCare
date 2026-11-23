@@ -40,15 +40,11 @@
     <ion-item *ngIf="!isEdit">
       <ion-label position="floating">Species *</ion-label>
       <ion-select [(ngModel)]="speciesId" placeholder="Select species">
-        <ion-select-option *ngFor="let s of speciesList" [value]="s.id">
-          {{ s.name }}
-        </ion-select-option>
+        <ion-select-option *ngFor="let s of speciesList" [value]="s.id"> {{ s.name }} </ion-select-option>
       </ion-select>
     </ion-item>
 
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <ion-button expand="block" (click)="savePet()" [disabled]="isLoading" class="save-button">
       <ion-spinner *ngIf="isLoading"></ion-spinner>

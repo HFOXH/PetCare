@@ -9,9 +9,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="form-container">
-    <p class="info-text">
-      Review and correct the data extracted by AI. Confirm when ready.
-    </p>
+    <p class="info-text">Review and correct the data extracted by AI. Confirm when ready.</p>
 
     <ion-item>
       <ion-label position="floating">Vaccine Name *</ion-label>
@@ -43,9 +41,7 @@
       <ion-input type="text" [(ngModel)]="notes"></ion-input>
     </ion-item>
 
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <ion-button expand="block" (click)="saveExtraction()" [disabled]="isLoading" class="save-button">
       <ion-spinner *ngIf="isLoading"></ion-spinner>

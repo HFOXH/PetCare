@@ -1,7 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, IonList, IonItem, IonLabel, IonSpinner } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton,
+  IonIcon,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonSpinner,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { create, trash, medical, camera } from 'ionicons/icons';
 import { ApiService } from '../../services/api.service';
@@ -11,14 +26,34 @@ import { Pet } from '../../models/pet.model';
   selector: 'app-pet-detail',
   templateUrl: 'pet-detail.page.html',
   styleUrls: ['pet-detail.page.scss'],
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, IonList, IonItem, IonLabel, IonSpinner],
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonSpinner,
+  ],
 })
 export class PetDetailPage implements OnInit {
   pet: Pet | null = null;
   isLoading = false;
   errorMessage = '';
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     addIcons({ create, trash, medical, camera });
   }
 
@@ -39,7 +74,7 @@ export class PetDetailPage implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.message || 'Failed to load pet';
-      }
+      },
     });
   }
 
@@ -57,7 +92,7 @@ export class PetDetailPage implements OnInit {
         },
         error: (err) => {
           this.errorMessage = err.message || 'Failed to delete pet';
-        }
+        },
       });
     }
   }
